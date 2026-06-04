@@ -1,0 +1,17 @@
+/target
+# Rust build artifacts - these are HUGE! DO NOT commit these!
+/target/
+**/target/
+
+# Cargo.lock - for binary executables, exclude this
+Cargo.lock
+
+# Backup files
+**/*.rs.bk
+
+# Debug symbols and Windows PDB files
+*.pdb
+
+# IDE files (optional, but good to exclude)
+.vscode/
+.idea/
