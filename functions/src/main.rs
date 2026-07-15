@@ -3,6 +3,12 @@ fn main() {
 
     my_function(5); //calling the function and also we can call a function multiple times in the main function or any other function.
     is_even(4);
+
+    let number = 3;
+
+    if number == 3{
+        println!("Number is a true value")
+    }
 }
 
 // snake casing is just a multiple word used when we define any function or variable or something similar divided by _
@@ -41,3 +47,4 @@ fn is_even(x: i32) -> bool {
         false
     }
 }
+
