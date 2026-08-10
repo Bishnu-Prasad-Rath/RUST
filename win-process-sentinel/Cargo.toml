@@ -6,3 +6,15 @@ edition = "2024"
 [dependencies]
 colored = "2.1"
 comfy-table = "7.1"
+
+#Microsoft Win32 API Bindings
+[dependencies.windows-sys]
+version = "0.52"
+features = [
+   "Win32_Foundation",
+   "Win32_System_Diagnostics_ToolHelp",
+   "Win32_System_Threading",
+   "Win32_System_ProcessStatus",
+   "Win32_UI_WindowsAndMessaging",
+   "Win32_UI_Input_KeyboardAndMouse",
+]
