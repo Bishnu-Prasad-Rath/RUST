@@ -37,7 +37,7 @@ pub fn fetch_live_processes_win32()-> Result<Vec<ProcessInfo>, String>{
 
   // 2. Initialize the Windows PROCESSENTRY32W C-struct
   let mut entry: PROCESSENTRY32W = std::mem::zeroed();
-  entry.dwSize = std::mem::size_of::<PROCESSENTRY32W> as u32;
+  entry.dwSize = std::mem::size_of::<PROCESSENTRY32W>() as u32;
 
   // 3. Retrieve the first process from the sapshot
   if Process32FirstW(snapshot_handle, &mut entry) != 0{
@@ -62,7 +62,15 @@ pub fn fetch_live_processes_win32()-> Result<Vec<ProcessInfo>, String>{
           // For raw Win32 process enumeration, memory sis fetched via handles.
           // I assign a default placeholder here or calculate exact working sets in the next phase
 
-          processes.push(ProcessInfo::new(pid, name, 0, category));
+          let memory_mb = get_process_memory(pid);
+          
+        processes.push(ProcessInfo {
+                        pid,
+                        name,
+                        memory_mb,
+                        category,
+                        status: HealthStatus::Normal,
+                    });
         }
           //Move to the next process in the snapshot loop, break when return 0.
           if Process32NextW(snapshot_handle, &mut entry) == 0{
