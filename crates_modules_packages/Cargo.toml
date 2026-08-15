@@ -1,0 +1,6 @@
+[package]
+name = "crates_modules_packages"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
