@@ -1,5 +1,6 @@
+use crate::engine::process::{force_kill_pid, log_event};
 use crate::models::{HealthStatus, ProcessCategory, ProcessInfo, ThreatLevel};
-use crate::system::{ask_user_confirmation, kill_process};
+use std::io::{self, Write};
 
 pub fn scan_process_threats(proc: &mut ProcessInfo) {
     let name_lower = proc.name.to_lowercase();
@@ -28,7 +29,6 @@ pub fn scan_process_threats(proc: &mut ProcessInfo) {
                 proc.memory_mb
             );
             proc.status = HealthStatus::SecurityRisk(ThreatLevel::Medium(reason));
-            return;
         }
     }
 }
@@ -51,7 +51,16 @@ pub fn enforce_security_and_limits(processes: &mut [ProcessInfo], memory_thresho
                         proc.pid, proc.name
                     );
                     if ask_user_confirmation(&prompt) {
-                        kill_process(proc);
+                        if force_kill_pid(proc.pid) {
+                            proc.status = HealthStatus::Terminated;
+                            log_event(
+                                "TERMINATED",
+                                &format!(
+                                    "Killed security threat {} (PID: {})",
+                                    proc.name, proc.pid
+                                ),
+                            );
+                        }
                     }
                 }
                 _ => {}
@@ -68,26 +77,35 @@ pub fn enforce_security_and_limits(processes: &mut [ProcessInfo], memory_thresho
                         proc.name, proc.pid, mem, memory_threshold_mb
                     );
 
-                    // Ask user for confirmation instead of auto-killing
                     let prompt = format!(
                         "   └─ Do you want to terminate PID {} ({})?",
                         proc.pid, proc.name
                     );
-
                     if ask_user_confirmation(&prompt) {
-                        kill_process(proc);
-                    } else {
-                        println!("   └─ Action skipped by user for PID {}.", proc.pid);
+                        if force_kill_pid(proc.pid) {
+                            proc.status = HealthStatus::Terminated;
+                            log_event(
+                                "TERMINATED",
+                                &format!(
+                                    "Killed high-memory app {} (PID: {})",
+                                    proc.name, proc.pid
+                                ),
+                            );
+                        }
                     }
                 }
             }
-        } else if proc.category == ProcessCategory::System {
-            if let HealthStatus::HighMemoryUsage(mem) = proc.status {
-                println!(
-                    "\n🛡️ SYSTEM ALERT: High memory on system process {} ({} MB). Automatic kill disabled for safety.",
-                    proc.name, mem
-                );
-            }
         }
     }
+}
+
+fn ask_user_confirmation(prompt: &str) -> bool {
+    print!("{} (Y/N): ", prompt);
+    let _ = io::stdout().flush();
+    let mut input = String::new();
+    if io::stdin().read_line(&mut input).is_ok() {
+        let cleaned = input.trim();
+        return cleaned.eq_ignore_ascii_case("y") || cleaned.eq_ignore_ascii_case("yes");
+    }
+    false
 }

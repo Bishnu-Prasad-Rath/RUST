@@ -1,20 +1,26 @@
 [package]
-name = "win-process-sentinel"
+name = "sentinel"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 
 [dependencies]
 colored = "2.1"
 comfy-table = "7.1"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.9" # <-- YAML parser support
+sysinfo = "0.30"
 
-#Microsoft Win32 API Bindings
+# Microsoft Win32 API Bindings
 [dependencies.windows-sys]
 version = "0.52"
 features = [
-   "Win32_Foundation",
-   "Win32_System_Diagnostics_ToolHelp",
-   "Win32_System_Threading",
-   "Win32_System_ProcessStatus",
-   "Win32_UI_WindowsAndMessaging",
-   "Win32_UI_Input_KeyboardAndMouse",
+    "Win32_Foundation",
+    "Win32_System_Diagnostics_ToolHelp",
+    "Win32_System_Threading",
+    "Win32_System_ProcessStatus",
+    "Win32_System_SystemInformation",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_UI_Input_KeyboardAndMouse",
+    "Win32_System_Console",
 ]
