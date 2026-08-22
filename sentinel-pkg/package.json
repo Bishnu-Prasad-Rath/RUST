@@ -1,12 +1,18 @@
 {
   "name": "win-process-sentinel",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A lightning-fast universal developer launcher powered by Rust",
   "bin": {
     "daemon": "bin/wrapper.js"
   },
   "preferGlobal": true,
-  "keywords": ["cli", "rust", "developer-tools", "launcher", "productivity"],
+  "keywords": [
+    "cli",
+    "rust",
+    "developer-tools",
+    "launcher",
+    "productivity"
+  ],
   "author": "Bishnu.exe",
   "license": "MIT"
 }
