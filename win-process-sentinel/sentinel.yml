@@ -8,9 +8,9 @@ stages:
   testing:
     description: "Production testing with live logged-in dashboards"
     web_links:
-      - "https://dashboard.render.com"
-      - "https://cloud.mongodb.com/v2/6991bcf54a14017ad246f25e#/explorer/6991bd5f181657c5d22f7616/test" # Or paste your direct /v2/<project_id>#/clusters link here
+      - "https://reactbits.dev/"
+      - "https://www.convex.dev/ai?utm_source=chef" 
       - "https://github.com"
-      - "https://mail.google.com/mail/u/0/#inbox/FMfcgzQhVrKdwJkrfwwtxVjhsXBdSJGW"
+      - "https://terrific.tools/"
     tasks:
       - "cargo check"
